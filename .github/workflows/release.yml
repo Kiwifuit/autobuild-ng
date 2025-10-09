@@ -35,7 +35,7 @@ jobs:
           filename: target/release/autobuild-ng
 
       - name: Upload deb artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: autobuild-ng.deb
           filename: target/debian/autobuild-ng_*.deb
