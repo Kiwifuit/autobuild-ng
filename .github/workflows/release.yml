@@ -1,0 +1,41 @@
+name: Build & Release code
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build binary
+        run: cargo build --release
+
+      - name: Build .deb package
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deb
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: autobuild-ng
+          filename: target/release/autobuild-ng
+
+      - name: Upload deb artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: autobuild-ng.deb
+          filename: target/debian/autobuild-ng_*.deb
