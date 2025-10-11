@@ -35,10 +35,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: autobuild-ng
-          filename: target/release/autobuild-ng
+          path: target/release/autobuild-ng
 
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:
           name: autobuild-ng.deb
-          filename: target/debian/autobuild-ng_*.deb
+          path: target/debian/autobuild-ng_*.deb
