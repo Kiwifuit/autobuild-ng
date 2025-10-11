@@ -45,7 +45,7 @@ jobs:
           path: target/${{ matrix.platform.target }}/release/autobuild-ng
 
       - name: Upload deb artifact
-        uses: cloudsmith-io/action@master
+        uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
         if: contains(${{ matrix.platform.target }}, 'linux')
         with:
           api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
