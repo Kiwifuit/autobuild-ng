@@ -58,8 +58,9 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v5
-        id: artifacts
+        with:
+          path: artifacts
 
       - name: Show artifacts
         run: |
-          ls -laR ${{ steps.artifacts.download-path }}
+          ls -laR artifacts
