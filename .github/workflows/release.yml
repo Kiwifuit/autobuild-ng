@@ -10,6 +10,12 @@ jobs:
   build:
     name: Build project
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - target: x86_64-unknown-linux-gnu
+            bin: autobuild.x86
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,22 +32,30 @@ jobs:
           tool: cargo-deb
 
       - name: Build binary
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.platform.target }}
 
       - name: Build deb package
-        run: cargo deb --target x86_64-unknown-linux-gnu
+        run: cargo deb --target ${{ matrix.platform.target }}
+        if: contains(${{ matrix.platform.target }}, 'linux')
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: autobuild-ng
-          path: target/release/autobuild-ng
+          name: bin.autobuild-ng.${{ matrix.platform.target }}
+          path: target/${{ matrix.platform.target }}/release/autobuild-ng
 
       - name: Upload deb artifact
-        uses: actions/upload-artifact@v4
+        uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
+        if: contains(${{ matrix.platform.target }}, 'linux')
         with:
-          name: autobuild-ng.deb
-          path: target/debian/autobuild-ng_*.deb
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: deb
+          owner: inhumane
+          repo: hello-world
+          republish: "true"
+          file: target/${{ matrix.platform.target }}/debian/*.deb
+          executable: false
 
   release:
     runs-on: ubuntu-latest
@@ -50,8 +64,9 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v5
-        id: artifacts
+        with:
+          path: artifacts
 
       - name: Show artifacts
         run: |
-          ls -laR ${{ steps.artifacts.download-path }}
+          ls -laR artifacts
