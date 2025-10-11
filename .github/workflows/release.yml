@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -20,22 +20,38 @@ jobs:
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
-      - name: Build binary
-        run: cargo build --release
-
-      - name: Build .deb package
+      - name: Install cargo-deb
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-deb
+
+      - name: Build binary
+        run: cargo build --release
+
+      - name: Build deb package
+        run: cargo deb --target x86_64-unknown-linux-gnu
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: autobuild-ng
-          filename: target/release/autobuild-ng
+          path: target/release/autobuild-ng
 
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:
           name: autobuild-ng.deb
-          filename: target/debian/autobuild-ng_*.deb
+          path: target/debian/autobuild-ng_*.deb
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v5
+        id: artifacts
+
+      - name: Show artifacts
+        run: |
+          ls -laR ${{ steps.artifacts.download-path }}
