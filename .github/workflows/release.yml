@@ -54,8 +54,9 @@ jobs:
           owner: inhumane
           repo: hello-world
           republish: "true"
+          distro: debian
+          release: trixie
           file: target/${{ matrix.platform.target }}/debian/*.deb
-          executable: false
 
   release:
     runs-on: ubuntu-latest
