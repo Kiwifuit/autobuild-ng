@@ -8,17 +8,34 @@ on:
 
 jobs:
   build:
-    name: Build project
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         platform:
           - target: x86_64-unknown-linux-gnu
             bin: autobuild.x86
+            packages: ''
+            runner: ubuntu-latest
+
+          - target: armv7-unknown-linux-gnueabihf
+            bin: autobuild.armv7
+            packages: crossbuild-essential-armhf
+            runner: ubuntu-latest
+
+          - target: aarch64-unknown-linux-gnu
+            bin: autobuild.aarch64
+            packages: crossbuild-essential-arm64
+            runner: ubuntu-latest
+
+    name: Build project
+    runs-on: ${{ matrix.platform.runner }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: sudo apt update && sudo apt install ${{ matrix.platform.packages }}
+        if: ${{ matrix.platform.packages != '' && matrix.platform.runner == 'ubuntu-latest'}}
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
