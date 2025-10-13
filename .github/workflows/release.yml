@@ -98,3 +98,26 @@ jobs:
           mv artifacts/*/* dist/
 
           ls -la dist/
+
+      - name: Create Changelog
+        uses: requarks/changelog-action@v1
+        id: changelog
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ env.previous_tag }}
+          toTag: ${{ github.ref_name }}
+          tag: ${{ github.ref_name }}
+          writeToFile: false
+          reverseOrder: true
+          # excludeTypes: docs,chore
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2.0.8
+        with:
+          name: "AutoBuild ${{ github.ref_name }}"
+          body: ${{ steps.changelog.output.changes }}
+          files: |
+            dist/*
+          generate_release_notes: true
+          append_body: true
+          make_latest: true
