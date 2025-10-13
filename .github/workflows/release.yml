@@ -42,6 +42,8 @@ jobs:
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform.target }}
 
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
