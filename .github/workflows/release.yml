@@ -94,4 +94,7 @@ jobs:
 
       - name: Collect artifacts
         run: |
-          ls -laR artifacts
+          mkdir dist
+          mv artifacts/*/* dist/
+
+          ls -la dist/
