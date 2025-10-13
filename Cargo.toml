@@ -1,6 +1,6 @@
 [package]
 name = "autobuild-ng"
-version = "0.2.1"
+version = "0.2.2"
 description = "A test project aimed to create automatic releases by leveraging CI/CD in GitHub"
 authors = ["Kiwifuit <75169058+Kiwifuit@users.noreply.github.com>"]
 license = "MIT"
