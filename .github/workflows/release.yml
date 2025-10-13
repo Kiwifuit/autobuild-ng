@@ -65,6 +65,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
+          name: bin.${{ matrix.platform.target }}
           path: ${{ matrix.platform.artifact }}
 
       - name: Upload deb artifact
