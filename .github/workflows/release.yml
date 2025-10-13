@@ -12,17 +12,20 @@ jobs:
       matrix:
         platform:
           - target: x86_64-unknown-linux-gnu
-            bin: autobuild.x86
+            artifact: autobuild-ng.x86
+            bin: autobuild-ng
             packages: ''
             runner: ubuntu-latest
 
           - target: armv7-unknown-linux-gnueabihf
-            bin: autobuild.armv7
+            artifact: autobuild-ng.armv7
+            bin: autobuild-ng
             packages: crossbuild-essential-armhf
             runner: ubuntu-latest
 
           - target: aarch64-unknown-linux-gnu
-            bin: autobuild.aarch64
+            artifact: autobuild-ng.aarch64
+            bin: autobuild-ng
             packages: crossbuild-essential-arm64
             runner: ubuntu-latest
 
@@ -49,7 +52,9 @@ jobs:
           tool: cargo-deb
 
       - name: Build binary
-        run: cargo build --release --target ${{ matrix.platform.target }}
+        run: |
+          cargo build --release --target ${{ matrix.platform.target }}
+          mv target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}  ${{ matrix.platform.artifact }}
 
       - name: Build deb package
         run: cargo deb --target ${{ matrix.platform.target }}
@@ -58,8 +63,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bin.autobuild-ng.${{ matrix.platform.target }}
-          path: target/${{ matrix.platform.target }}/release/autobuild-ng
+          path: ${{ matrix.platform.artifact }}
 
       - name: Upload deb artifact
         uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
@@ -85,6 +89,6 @@ jobs:
         with:
           path: artifacts
 
-      - name: Show artifacts
+      - name: Collect artifacts
         run: |
           ls -laR artifacts
