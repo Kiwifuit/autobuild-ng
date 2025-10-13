@@ -6,6 +6,13 @@ authors = ["Kiwifuit <75169058+Kiwifuit@users.noreply.github.com>"]
 license = "MIT"
 edition = "2024"
 
+[package.metadata.deb]
+extended-description = """
+`autobuild-ng` is a simple Ratatui application that demonstrates the
+use of GitHub Actions to create automatic releases. When installed,
+it shows Ratatui's simple TUI app template.
+"""
+
 [dependencies]
 crossterm = "0.29.0"
 ratatui = "0.29.0"
