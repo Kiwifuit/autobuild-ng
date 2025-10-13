@@ -106,7 +106,7 @@ jobs:
           token: ${{ github.token }}
           fromTag: ${{ env.previous_tag }}
           toTag: ${{ github.ref_name }}
-          tag: ${{ github.ref_name }}
+          # tag: ${{ github.ref_name }}
           writeToFile: false
           reverseOrder: true
           # excludeTypes: docs,chore
