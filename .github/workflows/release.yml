@@ -76,7 +76,7 @@ jobs:
           command: push
           format: deb
           owner: inhumane
-          repo: hello-world
+          repo: miscellaneous
           republish: "true"
           distro: debian
           release: trixie
