@@ -3,7 +3,7 @@ name: Build & Release code
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             artifact: autobuild-ng.x86
             bin: autobuild-ng
-            packages: ''
+            packages: ""
             runner: ubuntu-latest
 
           - target: armv7-unknown-linux-gnueabihf
@@ -66,7 +66,7 @@ jobs:
 
       - name: Build deb package
         run: cargo deb --target ${{ matrix.platform.target }}
-        if: contains(${{ matrix.platform.target }}, 'linux')
+        if: contains(matrix.platform.target, 'linux')
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -76,7 +76,7 @@ jobs:
 
       - name: Upload deb artifact
         uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
-        if: contains(${{ matrix.platform.target }}, 'linux')
+        if: contains(matrix.platform.target, 'linux')
         with:
           api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
           command: push
@@ -123,7 +123,7 @@ jobs:
         uses: softprops/action-gh-release@v2.4.1
         with:
           name: "AutoBuild ${{ github.ref_name }}"
-          body: ${{ steps.changelog.output.changes }}
+          body: ${{ steps.changelog.outputs.changes }}
           files: |
             dist/*
           generate_release_notes: true
