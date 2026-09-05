@@ -59,20 +59,20 @@ jobs:
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
 
-      - name: Install cargo-deb
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-deb
-        if: matrix.platform.runner == 'ubuntu-latest'
+      # - name: Install cargo-deb
+      #   uses: taiki-e/install-action@v2
+      #   with:
+      #     tool: cargo-deb
+      #   if: matrix.platform.runner == 'ubuntu-latest'
 
       - name: Build binary
         run: |
           cargo build --release --target ${{ matrix.platform.target }}
           mv target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}  ${{ matrix.platform.artifact }}
 
-      - name: Build deb package
-        run: cargo deb --target ${{ matrix.platform.target }}
-        if: matrix.platform.runner == 'ubuntu-latest'
+      # - name: Build deb package
+      #   run: cargo deb --target ${{ matrix.platform.target }}
+      #   if: matrix.platform.runner == 'ubuntu-latest'
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -80,19 +80,19 @@ jobs:
           name: bin.${{ matrix.platform.target }}
           path: ${{ matrix.platform.artifact }}
 
-      - name: Upload deb artifact
-        uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
-        if: contains(matrix.platform.target, 'linux')
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: deb
-          owner: inhumane
-          repo: miscellaneous
-          republish: "true"
-          distro: debian
-          release: trixie
-          file: target/${{ matrix.platform.target }}/debian/*.deb
+      # - name: Upload deb artifact
+      #   uses: cloudsmith-io/action@7af394e0f8add4867bce109385962dafecad1b8d
+      #   if: contains(matrix.platform.target, 'linux')
+      #   with:
+      #     api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+      #     command: push
+      #     format: deb
+      #     owner: inhumane
+      #     repo: miscellaneous
+      #     republish: "true"
+      #     distro: debian
+      #     release: trixie
+      #     file: target/${{ matrix.platform.target }}/debian/*.deb
 
   release:
     runs-on: ubuntu-latest
@@ -123,7 +123,7 @@ jobs:
           tag: ${{ github.ref_name }}
           writeToFile: false
           reverseOrder: true
-          # excludeTypes: docs,chore
+          excludeTypes: docs,deps
 
       - name: Create release
         uses: softprops/action-gh-release@v2.4.1
