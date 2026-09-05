@@ -29,6 +29,12 @@ jobs:
             packages: crossbuild-essential-arm64
             runner: ubuntu-latest
 
+          - target: x86_74-pc-windows-msvc
+            artifact: autobuild-ng-amd64.exe
+            bin: autobuild-ng.exe
+            packages:
+            runner: windows-latest
+
     name: Build project
     runs-on: ${{ matrix.platform.runner }}
 
