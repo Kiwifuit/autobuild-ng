@@ -29,7 +29,7 @@ jobs:
             packages: crossbuild-essential-arm64
             runner: ubuntu-latest
 
-          - target: x86_74-pc-windows-msvc
+          - target: x86_64-pc-windows-msvc
             artifact: autobuild-ng-amd64.exe
             bin: autobuild-ng.exe
             packages:
